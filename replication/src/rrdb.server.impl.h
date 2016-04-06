@@ -13,9 +13,9 @@ namespace dsn {
 
             // the following methods may set physical error if internal error occurs
             virtual void on_put(const update_request& update, ::dsn::replication::rpc_replication_app_replier<int>& reply) override;
-            virtual void on_remove(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<int>& reply) override;
+            virtual void on_remove(const std::string& key, ::dsn::replication::rpc_replication_app_replier<int>& reply) override;
             virtual void on_merge(const update_request& update, ::dsn::replication::rpc_replication_app_replier<int>& reply) override;
-            virtual void on_get(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply) override;
+            virtual void on_get(const std::string& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply) override;
 
             // open the db
             // if create_new == true, then first clear data and then create new db

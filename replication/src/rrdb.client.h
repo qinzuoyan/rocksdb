@@ -15,7 +15,7 @@ public:
     // from requests to partition index
     // PLEASE DO RE-DEFINE THEM IN A SUB CLASS!!!
     virtual uint64_t get_key_hash(const update_request& key) { return 0; }
-    virtual uint64_t get_key_hash(const ::dsn::blob& key) { return 0; }
+    virtual uint64_t get_key_hash(const std::string& key) { return 0; }
 
     // ---------- call RPC_RRDB_RRDB_PUT ------------
     // - synchronous  
@@ -60,7 +60,7 @@ public:
     // ---------- call RPC_RRDB_RRDB_REMOVE ------------
     // - synchronous  
     std::pair< ::dsn::error_code, int32_t> remove_sync(
-        const ::dsn::blob& key,
+        const std::string& key,
         std::chrono::milliseconds timeout = std::chrono::milliseconds(0)
         )
     {
@@ -77,10 +77,10 @@ public:
             );
     }
  
-    // - asynchronous with on-stack ::dsn::blob and int32_t 
+    // - asynchronous with on-stack std::string and int32_t 
     template<typename TCallback>
     ::dsn::task_ptr remove(
-        const ::dsn::blob& key,
+        const std::string& key,
         TCallback&& callback,
         std::chrono::milliseconds timeout = std::chrono::milliseconds(0),
         int reply_hash = 0
@@ -140,7 +140,7 @@ public:
     // ---------- call RPC_RRDB_RRDB_GET ------------
     // - synchronous  
     std::pair< ::dsn::error_code, read_response> get_sync(
-        const ::dsn::blob& key,
+        const std::string& key,
         std::chrono::milliseconds timeout = std::chrono::milliseconds(0),
         ::dsn::replication::read_semantic semantic = ::dsn::replication::read_semantic::ReadLastUpdate
         )
@@ -159,10 +159,10 @@ public:
             );
     }
  
-    // - asynchronous with on-stack ::dsn::blob and read_response 
+    // - asynchronous with on-stack std::string and read_response 
     template<typename TCallback>
     ::dsn::task_ptr get(
-        const ::dsn::blob& key,
+        const std::string& key,
         TCallback&& callback,
         std::chrono::milliseconds timeout = std::chrono::milliseconds(0),
         int reply_hash = 0,

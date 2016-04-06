@@ -23,8 +23,8 @@ namespace dsn { namespace apps {
     // ---------- update_request -------------
     struct update_request
     {
-        ::dsn::blob key;
-        ::dsn::blob value;
+        std::string key;
+        std::string value;
     };
 
     inline void marshall(::dsn::binary_writer& writer, const update_request& val)
@@ -43,7 +43,7 @@ namespace dsn { namespace apps {
     struct read_response
     {
         int32_t error;
-        ::dsn::blob value;
+        std::string value;
     };
 
     inline void marshall(::dsn::binary_writer& writer, const read_response& val)

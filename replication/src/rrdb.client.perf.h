@@ -68,7 +68,7 @@ public:
 
     virtual void send_one_remove(int payload_bytes, int key_space_size)
     {
-        ::dsn::blob req;
+        std::string req;
 
         // TODO: randomize the value of req
         // auto rs = random64(0, 10000000) % key_space_size;
@@ -108,7 +108,7 @@ public:
 
     virtual void send_one_get(int payload_bytes, int key_space_size)
     {
-        ::dsn::blob req;
+        std::string req;
 
         // TODO: randomize the value of req
         // auto rs = random64(0, 10000000) % key_space_size;

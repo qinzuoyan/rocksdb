@@ -19,11 +19,11 @@ update_request::~update_request() throw() {
 }
 
 
-void update_request::__set_key(const  ::dsn::blob& val) {
+void update_request::__set_key(const std::string& val) {
   this->key = val;
 }
 
-void update_request::__set_value(const  ::dsn::blob& val) {
+void update_request::__set_value(const std::string& val) {
   this->value = val;
 }
 
@@ -49,16 +49,16 @@ uint32_t update_request::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->key.read(iprot);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->key);
           this->__isset.key = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->value.read(iprot);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->value);
           this->__isset.value = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -81,12 +81,12 @@ uint32_t update_request::write(::apache::thrift::protocol::TProtocol* oprot) con
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("update_request");
 
-  xfer += oprot->writeFieldBegin("key", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->key.write(oprot);
+  xfer += oprot->writeFieldBegin("key", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeBinary(this->key);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->value.write(oprot);
+  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeBinary(this->value);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -129,7 +129,7 @@ void read_response::__set_error(const int32_t val) {
   this->error = val;
 }
 
-void read_response::__set_value(const  ::dsn::blob& val) {
+void read_response::__set_value(const std::string& val) {
   this->value = val;
 }
 
@@ -163,8 +163,8 @@ uint32_t read_response::read(::apache::thrift::protocol::TProtocol* iprot) {
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->value.read(iprot);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->value);
           this->__isset.value = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -191,8 +191,8 @@ uint32_t read_response::write(::apache::thrift::protocol::TProtocol* oprot) cons
   xfer += oprot->writeI32(this->error);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->value.write(oprot);
+  xfer += oprot->writeFieldBegin("value", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeBinary(this->value);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();

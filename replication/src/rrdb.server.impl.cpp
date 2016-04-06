@@ -240,7 +240,7 @@ void rrdb_service_impl::on_put(const update_request& update, ::dsn::replication:
     }
 }
 
-void rrdb_service_impl::on_remove(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<int>& reply)
+void rrdb_service_impl::on_remove(const std::string& key, ::dsn::replication::rpc_replication_app_replier<int>& reply)
 {
     dassert(_is_open, "rrdb service %s is not ready", data_dir().c_str());
 
@@ -281,29 +281,18 @@ void rrdb_service_impl::on_merge(const update_request& update, ::dsn::replicatio
     }
 }
 
-void rrdb_service_impl::on_get(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply)
+void rrdb_service_impl::on_get(const std::string& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply)
 {
     dassert(_is_open, "rrdb service %s is not ready", data_dir().c_str());
 
     read_response resp;
     rocksdb::Slice skey(key.data(), key.length());
-    std::string* value = new std::string();
-    rocksdb::Status status = _db->Get(_rd_opts, skey, value);
+    rocksdb::Status status = _db->Get(_rd_opts, skey, &resp.value);
     if (!status.ok() && !status.IsNotFound())
     {
         derror("%s failed, status = %s", __FUNCTION__, status.ToString().c_str());
     }
     resp.error = status.code();
-    if (status.ok() && value->size() > 0)
-    {
-        // tricy code to avoid memory copy
-        std::shared_ptr<char> b(&value->front(), [value](char*){delete value;});
-        resp.value.assign(b, 0, value->size());
-    }
-    else
-    {
-        delete value;
-    }
     reply(resp);
 }
 

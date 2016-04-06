@@ -15,7 +15,6 @@
 #include <thrift/transport/TTransport.h>
 
 #include <thrift/cxxfunctional.h>
-#include <dsn/service_api_cpp.h>
 
 
 namespace dsn { namespace apps {
@@ -35,18 +34,18 @@ class update_request {
 
   update_request(const update_request&);
   update_request& operator=(const update_request&);
-  update_request() {
+  update_request() : key(), value() {
   }
 
   virtual ~update_request() throw();
-   ::dsn::blob key;
-   ::dsn::blob value;
+  std::string key;
+  std::string value;
 
   _update_request__isset __isset;
 
-  void __set_key(const  ::dsn::blob& val);
+  void __set_key(const std::string& val);
 
-  void __set_value(const  ::dsn::blob& val);
+  void __set_value(const std::string& val);
 
   bool operator == (const update_request & rhs) const
   {
@@ -87,18 +86,18 @@ class read_response {
 
   read_response(const read_response&);
   read_response& operator=(const read_response&);
-  read_response() : error(0) {
+  read_response() : error(0), value() {
   }
 
   virtual ~read_response() throw();
   int32_t error;
-   ::dsn::blob value;
+  std::string value;
 
   _read_response__isset __isset;
 
   void __set_error(const int32_t val);
 
-  void __set_value(const  ::dsn::blob& val);
+  void __set_value(const std::string& val);
 
   bool operator == (const read_response & rhs) const
   {

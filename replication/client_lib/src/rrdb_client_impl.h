@@ -15,16 +15,14 @@ public:
             const char* replicate_app_name)
         :rrdb_client(meta_servers, replicate_app_name)
     {}
-    virtual uint64_t get_key_hash(const ::dsn::blob& key)
+    virtual uint64_t get_key_hash(const std::string& key)
     {
         dassert(key.length() > 4, "key length must be greater than 4");
-        // TODO(qinzuoyan): little endian
+        // In little-endian
         int length = *((int*)key.data());
         dassert(key.length() >= 4 + length, "key length must be greater than 4 + hash_key length");
-        dsn::blob hash_key(key.buffer_ptr(), 4, length);
-        return dsn_crc64_compute(hash_key.data(), hash_key.length(), 0);
+        return dsn_crc64_compute(key.data() + 4, length, 0);
     }
-
     virtual uint64_t get_key_hash(const update_request& key)
     {
         return get_key_hash(key.key);
@@ -66,7 +64,7 @@ public:
     static void init_error();
 
 private:
-    static void generate_key(dsn::blob& key, const std::string& hash_key, const std::string& sort_key);
+    static void generate_key(std::string& key, const std::string& hash_key, const std::string& sort_key);
     static int get_client_error(int server_error);
     static int get_rocksdb_server_error(int rocskdb_error);
 

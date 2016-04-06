@@ -53,7 +53,7 @@ public:
            
         }
         {
-            ::dsn::blob req;
+            std::string req;
             //sync:
             error_code err;
             int32_t resp;
@@ -75,7 +75,7 @@ public:
            
         }
         {
-            ::dsn::blob req;
+            std::string req;
             //sync:
             error_code err;
             read_response resp;

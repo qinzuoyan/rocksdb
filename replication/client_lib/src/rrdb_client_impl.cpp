@@ -67,7 +67,7 @@ int rrdb_client_impl::get(
     if(hash_key.empty())
         return ERROR_INVALID_HASH_KEY;
 
-    dsn::blob req;
+    std::string req;
     generate_key(req, hash_key, sort_key);
     auto pr = _client.get_sync(req, std::chrono::milliseconds(timeout_milliseconds));
     if(pr.first == ERR_OK)
@@ -85,7 +85,7 @@ int rrdb_client_impl::del(
     if(hash_key.empty())
         return ERROR_INVALID_HASH_KEY;
 
-    dsn::blob req;
+    std::string req;
     generate_key(req, hash_key, sort_key);
     auto pr = _client.remove_sync(req, std::chrono::milliseconds(timeout_milliseconds));
     return get_client_error(pr.first == ERR_OK ? get_rocksdb_server_error(pr.second) : pr.first.get());
@@ -135,15 +135,14 @@ const char* rrdb_client_impl::get_error_string(int error_code) const
     return (rocskdb_error == 0) ? 0 : ROCSKDB_ERROR_START - rocskdb_error;
 }
 
-/*static*/ void rrdb_client_impl::generate_key(dsn::blob& key, const std::string& hash_key, const std::string& sort_key)
+/*static*/ void rrdb_client_impl::generate_key(std::string& key, const std::string& hash_key, const std::string& sort_key)
 {
     int len = 4 + hash_key.size() + sort_key.size();
-    char* buf = new char[len];
-    // TODO(qinzuoyan): little endian
-    *(int*)buf = hash_key.size();
-    hash_key.copy(buf + 4, hash_key.size(), 0);
-    sort_key.copy(buf + 4 + hash_key.size(), sort_key.size(), 0);
-    std::shared_ptr<char> buffer(buf);
-    key.assign(buffer, 0, len);
+    key.reserve(len);
+    // In little-endian
+    int key_len = hash_key.size();
+    key.append((const char*)&key_len, 4);
+    key.append(hash_key);
+    key.append(sort_key);
 }
 }} // namespace

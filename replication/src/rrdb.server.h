@@ -30,7 +30,7 @@ protected:
         reply(resp);
     }
     // RPC_RRDB_RRDB_REMOVE 
-    virtual void on_remove(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<int32_t>& reply)
+    virtual void on_remove(const std::string& key, ::dsn::replication::rpc_replication_app_replier<int32_t>& reply)
     {
         std::cout << "... exec RPC_RRDB_RRDB_REMOVE ... (not implemented) " << std::endl;
         int32_t resp;
@@ -44,7 +44,7 @@ protected:
         reply(resp);
     }
     // RPC_RRDB_RRDB_GET 
-    virtual void on_get(const ::dsn::blob& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply)
+    virtual void on_get(const std::string& key, ::dsn::replication::rpc_replication_app_replier<read_response>& reply)
     {
         std::cout << "... exec RPC_RRDB_RRDB_GET ... (not implemented) " << std::endl;
         read_response resp;
